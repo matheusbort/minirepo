@@ -17,7 +17,7 @@ func initDb() {
 	db.AutoMigrate(&ToDo{})
 }
 
-func GetDb() *gorm.Db {
+func GetDb() *gorm.DB {
 	return db
 }
 
@@ -28,6 +28,14 @@ func main() {
 
 	r.GET("/", HelloWorld)
 	r.GET("/todos/create", Create)
+	r.PUT("/todos/:id", UpdateTodo)
+	r.DELETE("/todos/:id", DeleteTodo)
+	r.GET("/todos", ListTodos)
+	r.PUT("/todos/:id/complete", MarkTodoAsCompleted)
+	r.PUT("/todos/:id/incomplete", MarkTodoAsIncomplete)
+	r.GET("/todos/completed", ListCompletedTodos)
+	r.GET("/todos/notcompleted", ListNotCompletedTodos)
+	r.GET("/todos/bytitle", ListTodosByTitle)
 
 	r.Run(":8090")
 }
