@@ -1,0 +1,115 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    color: #066990;;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    .app {
+        background-color: rgb(158, 212, 233);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 10%;
+        gap: 16px;
+        min-height: 60vh;
+        min-width: 100vh;
+        border: 1px solid black;
+        header {
+            h1 {
+                border-bottom: 1px solid black;
+            }
+        }
+        main {
+            width: 95%;
+            height: 60vh;
+            .todo-add {
+                margin-bottom: 32px;
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                .todo-form {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content:center;
+                    align-items: center;
+                    gap: 12px;
+                    width: 100%;
+                    .input {
+                        width: 80%;
+                        padding: 8px;
+                        border: 1px solid black;
+                    }
+                    .add-button {
+                        padding: 8px;
+                        border: none;
+                        cursor: pointer;
+                        background-color: #066990;
+                        color: white;
+                        &:hover {
+                            background-color: lightgray;
+                        }
+                    }
+                }
+            }
+            .todo-list {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                width: 100%;
+                height: 100%;
+                .todo-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                    padding: 8px;
+                    border-bottom: 1px solid white;
+                    .todo-text {
+                        width: 65%;
+                        text-align: left;
+                        margin-left: 24px;
+                    }
+                    .todo-actions {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                        gap: 4px;
+                        .todo-action {
+                            padding: 8px;
+                            border: none;
+                            cursor: pointer;
+                            background-color: #066990;
+                            color: white;
+                            font-size: 8px;
+                            &:hover {
+                                background-color: lightgray;
+                            }
+                        
+                        }
+                    }
+                }
+            }
+            
+        
+        }
+        footer {
+            width: 100%;
+            border-top: 3px solid white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            p {
+                font-size: 12px;
+                margin: 8px;
+            }
+        }
+    }
+    
+}
