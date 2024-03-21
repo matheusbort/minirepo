@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
@@ -66,21 +67,21 @@ func HelloWorld(c *gin.Context) {
 // }
 
 func Create(c *gin.Context) {
-    var Todo ToDo
+	var Todo ToDo
 
-    if err := c.BindJSON(&Todo); err != nil {
-        c.JSON(400, gin.H{"message": "Error parsing todo"})
-        return
-    }
+	if err := c.BindJSON(&Todo); err != nil {
+		c.JSON(400, gin.H{"message": "Error parsing todo"})
+		return
+	}
 
-    Todo.Completed = false
-    err := GetDb().Create(&Todo).Error
-    if err != nil {
-        c.JSON(400, gin.H{"message": "Error creating todo"})
-        return
-    }
+	Todo.Completed = false
+	err := GetDb().Create(&Todo).Error
+	if err != nil {
+		c.JSON(400, gin.H{"message": "Error creating todo"})
+		return
+	}
 
-    c.JSON(200, gin.H{"message": Todo.Title + " Todo created"})
+	c.JSON(200, gin.H{"message": Todo.Title + " Todo created"})
 }
 
 func UpdateTodo(c *gin.Context) {
@@ -154,6 +155,13 @@ func ListTodos(c *gin.Context) {
 	}
 
 	c.JSON(200, todos)
+
+	// todos = []ToDo{
+	// 	{Title: "First todo", Completed: false},
+	// 	{Title: "Second todo", Completed: true},
+	// 	{Title: "Third todo", Completed: false},
+	// }
+	// c.JSON(200, todos)
 }
 
 func MarkTodoAsCompleted(c *gin.Context) {
@@ -256,6 +264,13 @@ func ListTodosByTitle(c *gin.Context) {
 
 func main() {
 	r := gin.Default()
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"http://localhost:8080"},
+		// AllowAllOrigins: true,
+		AllowMethods: []string{"GET", "POST", "OPTIONS", "PUT", "DELETE"},
+		AllowHeaders: []string{"Content-Type"},
+	}))
 
 	initDb()
 
