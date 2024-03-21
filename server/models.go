@@ -1,11 +1,11 @@
-package main
+// package main
 
-import (
-	"gorm.io/gorm"
-)
+// import (
+// 	"gorm.io/gorm"
+// )
 
-type ToDo struct {
-	gorm.Model
-	Title     string `json:"title"`
-	Completed bool   `json:"completed"`
-}
+// type ToDo struct {
+// 	gorm.Model
+// 	Title     string `json:"title"`
+// 	Completed bool   `json:"completed"`
+// }

@@ -1,15 +1,41 @@
 // http-server -c-1
 function App () {
-    const [todos, setTodos] = React.useState([
-        { id: 1, text: 'Learn React', isCompleted: false },
-        { id: 2, text: 'Meet friend for lunch', isCompleted: false },
-        { id: 3, text: 'Build really cool todo app', isCompleted: false }
-    ]);
+    const todos = [];
+
+    React.useEffect(() => {
+        const getTodos = async () => {
+            const todosFromServer = await fetch('http://localhost:8090/todos');
+            todos = todosFromServer.json();
+        }
+        getTodos();
+        console.log(todos);
+    }, [])
     
     const addTodo = text => {
-        const newTodos = [{ text: text, isCompleted: false }, ...todos];
-        setTodos(newTodos);
-    }
+        const newTodo = { title: text, isCompleted: false };
+        const postTodo = async () => {
+            try {
+                const response = await fetch('http://localhost:8090/todos', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newTodo),
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+    
+                const responseData = await response.json();
+                console.log('Todo created:', responseData);
+            } catch (error) {
+                console.error('Error creating todo:', error);
+            }
+        };
+    
+        postTodo();
+    };
 
     const removeTodo = index => {
         const newTodos = [...todos];
@@ -47,11 +73,11 @@ function App () {
                 </div>
             </main>
             <footer className="footer">
-                <p>@FernandoBDAF - MITxPRO Module 14 :D</p>
+                <p>Experimental - go + next.js</p>
             </footer>
         </div>
         )
 }
 
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
