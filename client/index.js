@@ -1,15 +1,18 @@
 // http-server -c-1
 function App () {
-    const todos = [];
+    const {useState, useEffect} = React;
+    const [todos, setTodos] = useState();
 
-    React.useEffect(() => {
-        const getTodos = async () => {
-            const todosFromServer = await fetch('http://localhost:8090/todos');
-            todos = todosFromServer.json();
-        }
-        getTodos();
-        console.log(todos);
-    }, [])
+    useEffect(() => {
+        fetch("http://localhost:8090/todos")
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if (data) {
+                setTodos(data);
+            }
+        })
+    }, []);
     
     const addTodo = text => {
         const newTodo = { title: text, isCompleted: false };
@@ -65,8 +68,8 @@ function App () {
                     <TodoForm addTodo={addTodo} />
                 </div>
                 <div className="todo-list">
-                    {todos.map((todo, i) => 
-                        <div className="todo-item">
+                    {todos && todos.map((todo, i) => 
+                        <div key={i} className="todo-item">
                             <Todo key={i} todo={todo} index={i} removeTodo={removeTodo} completeTodo={completeTodo} undoTodo={undoTodo} />
                         </div>
                     )}
