@@ -2,6 +2,7 @@
 function App () {
     const {useState, useEffect} = React;
     const [todos, setTodos] = useState();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetch("http://localhost:8090/todos")
@@ -12,6 +13,8 @@ function App () {
                 setTodos(data);
             }
         })
+        .catch(error => console.error('Error fetching todos:', error))
+        .finally(() => setLoading(false));
     }, []);
     
     const addTodo = text => {
@@ -56,6 +59,10 @@ function App () {
         const newTodos = [...todos];
         newTodos[index].isCompleted = false;
         setTodos(newTodos);
+    }
+
+    if (loading) {
+        return <Loader />;
     }
 
     return (
