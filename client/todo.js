@@ -16,10 +16,12 @@ function Todo({ todo, index, removeTodo, completeTodo, undoTodo }) {
 
   const toogleUpdate = () => {
     setUpdateMode(!updateMode);
+    setText(todo.title);
   }
 
-  const handleUpdate = async (event) => {
+  const submitUpdate = async () => {
     console.log(text)
+    setUpdateMode(false);
   }
 
   const extraClass = todo.completed ? "todo-completed" : "";
@@ -34,9 +36,14 @@ function Todo({ todo, index, removeTodo, completeTodo, undoTodo }) {
           <>
             {!updateMode && <button className="todo-action" onClick={toogleUpdate}>Edit</button>}
             {updateMode && <button className="todo-action" onClick={toogleUpdate}>Cancel</button>}
-            {updateMode && <button action="submit" className="todo-action" onClick={handleUpdate}>Confirm</button>}
+            {updateMode && <button action="submit" className="todo-action" onClick={submitUpdate}>Confirm</button>}
             {updateMode && <textarea className="todo-update" value={text} onChange={(e) => {setText(e.target.value)}}/>}
           </>
+        )}
+        {todo.completed === false && !updateMode && (
+          <button className="todo-action" onClick={handleDelete}>
+            Delete
+        </button>
         )}
         {todo.completed === false && !updateMode && (
           <button className="todo-action" onClick={handleComplete}>
@@ -47,11 +54,6 @@ function Todo({ todo, index, removeTodo, completeTodo, undoTodo }) {
           <button className="todo-action" onClick={handleUndo}>
             Undo
           </button>
-        )}
-        {todo.completed === false && !updateMode && (
-          <button className="todo-action" onClick={handleDelete}>
-            Delete
-        </button>
         )}
       </div>
     </>
