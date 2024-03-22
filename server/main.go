@@ -275,12 +275,13 @@ func main() {
 	initDb()
 
 	r.GET("/", HelloWorld)
-	r.POST("/todos", Create)
-	r.PUT("/todos/:id", UpdateTodo)
-	r.DELETE("/todos/:id", DeleteTodo)
 	r.GET("/todos", ListTodos)
+	r.POST("/todos", Create)
+	r.DELETE("/todos/:id", DeleteTodo)
 	r.PUT("/todos/:id/complete", MarkTodoAsCompleted)
 	r.PUT("/todos/:id/incomplete", MarkTodoAsIncomplete)
+	
+	r.PUT("/todos/:id", UpdateTodo)
 	r.GET("/todos/completed", ListCompletedTodos)
 	r.GET("/todos/notcompleted", ListNotCompletedTodos)
 	r.GET("/todos/bytitle", ListTodosByTitle)

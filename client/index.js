@@ -4,8 +4,9 @@ function App () {
     const [todos, setTodos] = useState();
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetch("http://localhost:8090/todos")
+    const getTodos = async () => {
+        setLoading(true);
+        await fetch("http://localhost:8090/todos")
         .then(response => response.json())
         .then(data => {
             console.log(data);
@@ -15,9 +16,13 @@ function App () {
         })
         .catch(error => console.error('Error fetching todos:', error))
         .finally(() => setLoading(false));
+    }
+
+    useEffect(() => {
+        getTodos()
     }, []);
     
-    const addTodo = text => {
+    const addTodo = async text => {
         const newTodo = { title: text, isCompleted: false };
         const postTodo = async () => {
             try {
@@ -40,25 +45,45 @@ function App () {
             }
         };
     
-        postTodo();
+        await postTodo();
+        await getTodos();
     };
 
     const removeTodo = index => {
-        const newTodos = [...todos];
-        newTodos.splice(index, 1);
-        setTodos(newTodos);
+        console.log('Removing todo:', index);
+        fetch(`http://localhost:8090/todos/${index}`, {
+            method: 'DELETE',
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Todo deleted:', data);
+            getTodos();
+        })
+        .catch(error => console.error('Error deleting todo:', error));
     }
 
     const completeTodo = index => {
-        const newTodos = [...todos];
-        newTodos[index].isCompleted = true;
-        setTodos(newTodos);
+        fetch(`http://localhost:8090/todos/${index}/complete`, {
+            method: 'PUT',
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Todo completed:', data);
+            getTodos();
+        })
+        .catch(error => console.error('Error completing todo:', error));
     }
 
     const undoTodo = index => {
-        const newTodos = [...todos];
-        newTodos[index].isCompleted = false;
-        setTodos(newTodos);
+        fetch(`http://localhost:8090/todos/${index}/incomplete`, {
+            method: 'PUT',
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Todo completed:', data);
+            getTodos();
+        })
+        .catch(error => console.error('Error completing todo:', error));
     }
 
     if (loading) {
@@ -77,7 +102,7 @@ function App () {
                 <div className="todo-list">
                     {todos && todos.map((todo, i) => 
                         <div key={i} className="todo-item">
-                            <Todo key={i} todo={todo} index={i} removeTodo={removeTodo} completeTodo={completeTodo} undoTodo={undoTodo} />
+                            <Todo key={i} todo={todo} index={i} removeTodo={() => removeTodo(todo.ID)} completeTodo={() => completeTodo(todo.ID)} undoTodo={() => undoTodo(todo.ID)} />
                         </div>
                     )}
                 </div>
